@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--import roboto from google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <title>ClubComms</title>
+</head>
+<body>
+    <div class="navbar">
+        <div class="leftnavbar">
+            <a href="home.html">
+                <img src="..\static\assets\webclip.png" alt="ClubComms Logo" width="50" height="50">
+            </a>
+            <div class="leftnavbarlinks">
+                <!--add logo (webclip.png)-->
+                <a class="link" href="home.html">Home</a>
+                <a class="link" href="about.html">About</a>
+                <a class="link" href="contact.html">Contact</a>
+                <a class="link" href="demo.html">Demo</a>
+            </div>
+        </div>
+        <div class="rightnavbar">
+            <a class="link" href="load.html">Load Backup</a>
+            <a class="link" href="save.html">Save Backup</a>
+        </div>
+    </div>
+    <div class="sidebar">
+        <h1>List of Clubs</h1>
+        <div class="searchbar">
+            <input type="text" id="searchbar" placeholder="Search..">
+        </div>
+        <div class="listofclubs">
+            <div class="club"><a href="#">Girls Who Code</a></div>
+            <div class="club"><a href="#">TechCodes</a></div>
+            <div class="club"><a href="#">National Society of Black Engineers</a></div>
+        </div>
+    </div>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #000000;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 50px;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 0px 16px;
+            text-decoration: none;
+        }
+
+        .leftnavbar {
+            float: left;
+        }
+
+        .leftnavbarlinks {
+            float: left;
+        }
+
+        .rightnavbar {
+            float: right;
+            height: 100%;
+        }
+        
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .navbar a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .navbar img {
+            float: left;
+            align-content: normal;
+        }
+
+        .navbar a.link {
+            padding: 15px 15px; /* Adjust as needed */
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            z-index: 1;
+            top: 50px;
+            left: 0;
+            background-color: #1e1e1e;
+            overflow-x: hidden;
+            padding-top: 10px;
+        }
+
+        .sidebar h1 {
+            color: #f2f2f2;
+            text-align: left;
+            padding-left: 15px
+        }
+
+        .searchbar {
+            padding: 0px 15px 15px 15px;
+        }
+
+        .searchbar input[type=text] {
+            width: 100%;
+            padding: 8px 20px;
+            margin: 2px 0;
+            box-sizing: border-box;
+            border: 3px solid #343434;
+            -webkit-transition: 0.5s;
+            transition: 0.5s;
+            outline: none;
+        }
+
+        .searchbar input[type=text]:focus {
+            border: 3px solid #555;
+        }
+
+        .listofclubs {
+            padding: 0px 15px 15px 15px;
+        }
+
+        .club {
+            padding: 0px 8px 6px 0px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #b9b9b9;
+            display: block;
+        }
+
+        .club:hover {
+            background-color: #555;
+            color: white;
+        }
+
+        .sidebar a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .sidebar a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 16px;
+            color: #f2f2f2;
+            display: block;
+        }
+
+        .clicked {
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+    <script>
+        document.querySelectorAll('.club a').forEach(function(club) {
+            club.addEventListener('click', function(event) {
+                event.preventDefault();
+                this.classList.toggle('clicked');
+            });
+        });
+
+        document.getElementById('searchbar').addEventListener('keyup', function() {
+            var searchQuery = this.value.toLowerCase();
+            document.querySelectorAll('.club a').forEach(function(club) {
+                var clubName = club.textContent || club.innerText;
+                club.style.display = clubName.toLowerCase().indexOf(searchQuery) > -1 ? '' : 'none';
+            });
+        });
+
+        document.querySelectorAll('.club a').forEach(function(club) {
+            club.addEventListener('click', function(event) {
+                event.preventDefault();
+                getClubInfo(this);
+            });
+        });
+
+        function getClubInfo(club) {
+            // Do something with the club
+            console.log(club.textContent || club.innerText);
+        }
+    </script>
+</body>
+</html>
