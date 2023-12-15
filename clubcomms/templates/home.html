@@ -31,10 +31,13 @@
         <div class="searchbar">
             <input type="text" id="searchbar" placeholder="Search..">
         </div>
-        <div class="listofclubs">
-            <div class="club"><a href="#">Girls Who Code</a></div>
-            <div class="club"><a href="#">TechCodes</a></div>
-            <div class="club"><a href="#">National Society of Black Engineers</a></div>
+        <div class="options" id="options">
+            <div class="only-show-selected-clubs-option">
+                <input type="checkbox" id="only-show-selected-checkbox" name="only-show-selected-checkbox" value="only-show-selected-checkbox" checked="false"">
+                <label for="only-show-selected-checkbox">Only Show Selected Clubs</label>
+            </div>
+        </div>
+        <div class="clubs-container" id="clubs-container">
         </div>
     </div>
     <style>
@@ -135,7 +138,45 @@
             border: 3px solid #555;
         }
 
-        .listofclubs {
+        .options {
+            padding: 0px 15px 15px 15px;
+        }
+
+        .only-show-selected-clubs-option {
+            padding: 0px 15px 15px 15px;
+            display: grid;
+            grid-template-columns: 0.1fr 1fr;
+            grid-gap: 10px;
+        }
+
+        .only-show-selected-clubs-option input[type=checkbox] {
+            width: 100%;
+            padding: 8px 20px;
+            margin: 2px 0;
+            box-sizing: border-box;
+            border: 3px solid #343434;
+            -webkit-transition: 0.5s;
+            transition: 0.5s;
+            outline: none;
+        }
+
+        .only-show-selected-clubs-option input[type=checkbox]:focus {
+            border: 3px solid #555;
+        }
+
+        .only-show-selected-clubs-option label {
+            color: #f2f2f2;
+            text-align: left;
+            padding-left: 15px;
+            grid-column: 2;
+        }
+
+        .only-show-selected-clubs-option input[type=checkbox]:checked {
+            background-color: #555;
+            color: white;
+        }
+
+        .clubs-container {
             padding: 0px 15px 15px 15px;
         }
 
@@ -143,7 +184,7 @@
             padding: 0px 8px 6px 0px;
             text-decoration: none;
             font-size: 20px;
-            color: #b9b9b9;
+            color: #8a8a8a;
             display: block;
         }
 
@@ -161,13 +202,13 @@
             padding: 6px 8px 6px 16px;
             text-decoration: none;
             font-size: 16px;
-            color: #f2f2f2;
+            color: #969696;
             display: block;
         }
 
-        .clicked {
+        a.clicked {
             font-weight: bold;
-            color: white;
+            color: #ffffff;
         }
     </style>
     <script>
@@ -182,21 +223,96 @@
             var searchQuery = this.value.toLowerCase();
             document.querySelectorAll('.club a').forEach(function(club) {
                 var clubName = club.textContent || club.innerText;
-                club.style.display = clubName.toLowerCase().indexOf(searchQuery) > -1 ? '' : 'none';
+                club.parentElement.style.display = clubName.toLowerCase().indexOf(searchQuery) > -1 ? 'block' : 'none';
             });
         });
 
         document.querySelectorAll('.club a').forEach(function(club) {
             club.addEventListener('click', function(event) {
                 event.preventDefault();
-                getClubInfo(this);
             });
         });
 
-        function getClubInfo(club) {
-            // Do something with the club
-            console.log(club.textContent || club.innerText);
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch the clubs from the JSON file
+            fetch('./static/clubdb.json')
+                .then(response => response.json())
+                .then(clubs => {
+                    var clubsContainer = document.getElementById('clubs-container');
+                    clubs.forEach(function(club) {
+                        var clubElement = document.createElement('div');
+                        clubElement.className = 'club';
+                        clubElement.style.display = 'block'; // Add display style
+                        var clubLink = document.createElement('a');
+                        clubLink.href = generateClubUrl(club.name);
+                        clubLink.textContent = club.name;
+                        // Add the click event listener to the club element
+                        clubLink.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            this.classList.toggle('bold'); 
+                            getClubInfo(this);
+                            var currentUrl = window.location.href;
+                            var clubUrl = generateClubUrl(club.name);
+                            if (this.classList.contains('bold')) {
+                                // If the club is selected, append the club name to the URL
+                                history.pushState(null, '', currentUrl + clubUrl);
+                            } else {
+                                // If the club is unselected, remove the club name from the URL
+                                var newUrl = currentUrl.replace(clubUrl, '');
+                                history.pushState(null, '', newUrl);
+                            }
+                        });
+                        clubElement.appendChild(clubLink);
+                        clubsContainer.appendChild(clubElement);
+
+                    });
+                    
+                    // Add the click event listener to the a elements
+                    document.querySelectorAll('.club a').forEach(function(club) {
+                        club.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            this.classList.toggle('clicked');
+                        });
+                    });
+
+                });
+                
+                function generateClubUrl(clubName) {
+                    // Replace spaces with hyphens and convert to lowercase
+                    var urlName = clubName.replace(/\s+/g, '-').toLowerCase();
+                    return '#' + urlName;
+                }
+                
+                var onlyShowSelectedCheckbox = document.getElementById('only-show-selected-checkbox');
+                onlyShowSelectedCheckbox.addEventListener('change', function() {
+                    var clubs = document.querySelectorAll('.club a');
+                    var isChecked = this.checked;  // Store the checkbox's checked state
+                    clubs.forEach(function(club) {
+                        if (isChecked) {  // Use the stored checked state
+                            // If the checkbox is checked, hide unselected clubs
+                            if (!club.classList.contains('bold')) {
+                                club.parentElement.style.display = 'none';
+                            }
+                        } else {
+                            // If the checkbox is unchecked, show all clubs
+                            club.parentElement.style.display = 'block';
+                        }
+                    });
+                });
+                // Reset the URL to its original state
+                var originalUrl = window.location.href.split('#')[0];
+                history.replaceState(null, '', originalUrl);
+    
+                // Reset the search bar and checkbox
+                var searchBar = document.getElementById('searchbar');
+                var checkbox = document.getElementById('only-show-selected-checkbox');
+                if (searchBar) {
+                    searchBar.value = '';
+                }
+                if (checkbox) {
+                    checkbox.checked = false;
+                }
+            });
     </script>
 </body>
 </html>
