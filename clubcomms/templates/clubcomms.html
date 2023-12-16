@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--import roboto from google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link href="../static/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <title>ClubComms</title>
 </head>
 <body>
@@ -14,9 +14,8 @@
                 <img src="../static/assets/webclip.png" alt="ClubComms Logo" width="50" height="50">
             </a>
             <div class="leftnavbarlinks">
-                <!--add logo (webclip.png)-->
                 <a class="link" href="#">Home</a>
-                <a class="link" href="../static/demo/index.html">Video</a>
+                <a class="link" href="demo/">Video/ Demo</a>
             </div>
         </div>
         <div class="rightnavbar">
@@ -321,7 +320,7 @@
             }
 
             // Fetch the clubs from the JSON file
-            fetch('./static/clubdb.json')
+            fetch('../static/clubdb.json')
                 .then(response => response.json())
                 .then(clubs => {
                     var clubsContainer = document.getElementById('clubs-container');
@@ -335,7 +334,7 @@
                         // Add the click event listener to the club element
                         clubLink.addEventListener('click', function(event) {
                             event.preventDefault();
-                            this.classList.toggle('bold'); 
+                            this.classList.toggle('bold');
                             var currentUrl = window.location.href;
                             var clubUrl = generateClubUrl(club.name);
                             if (this.classList.contains('bold')) {
