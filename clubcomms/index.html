@@ -426,27 +426,27 @@
                 var clubInstagram =
                   clubs.find(function (club) {
                     return club.name === clubName;
-                  }).instagram || "Not Found";
+                  }).instagram || "Not In Database";
                 /* get club advisor from clubdb.json. if none found, set it to not found*/
                 var clubAdvisor =
                   clubs.find(function (club) {
                     return club.name === clubName;
-                  }).advisor || "Not Found";
+                  }).advisor || "Not In Database";
                 /* get club room from clubdb.json. if none found, set it to not found*/
                 var clubRoom =
                   clubs.find(function (club) {
                     return club.name === clubName;
-                  }).rooms || "Not Found";
+                  }).rooms || "Not In Database";
                 /* get club meeting days from clubdb.json. if none found, set it to not found*/
                 var clubMeetingDays =
                   clubs.find(function (club) {
                     return club.name === clubName;
-                  }).days || "Not Found";
+                  }).days || "Not In Database";
                 /* get club frequency from clubdb.json. if none found, set it to not found*/
                 var clubFrequency =
                   clubs.find(function (club) {
                     return club.name === clubName;
-                  }).frequency || "Not Found";
+                  }).frequency || "Not In Database";
 
                 /* set elements in id "main" div to club info */
                 document.getElementById("club-name").innerHTML = clubName;
